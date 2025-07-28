@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from scipy import stats
 
-from gram_schmidt_walk import GramSchmidtWalk
-from data_processor import DataProcessor
+from ..core.gram_schmidt_walk import GramSchmidtWalk
+from .data_processor import DataProcessor
 
 
 class BalancedDataSplitter:

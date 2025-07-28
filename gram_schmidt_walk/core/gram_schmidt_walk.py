@@ -100,7 +100,7 @@ class GramSchmidtWalk:
     
     def compute_step_sizes(self, update):
         """
-        Compute positive and negative step sizes that maintain -1 ≤ coloring ≤ 1.
+        Vectorized computation of positive and negative step sizes that maintain -1 ≤ coloring ≤ 1.
         
         Args:
             update: Update direction vector
@@ -109,27 +109,25 @@ class GramSchmidtWalk:
             delta_minus: Negative step size
             delta_plus: Positive step size
         """
-        alive_indices = np.where(self.alive)[0]
+        alive_mask = self.alive
+        update_alive = update[alive_mask]
+        coloring_alive = self.coloring[alive_mask]
         
-        pos_steps = []
-        neg_steps = []
-        
-        for i in alive_indices:
-            if abs(update[i]) < 1e-10:
-                continue
-                
-            step_to_neg1 = (-1 - self.coloring[i]) / update[i]
-            step_to_pos1 = (1 - self.coloring[i]) / update[i]
+        nonzero_mask = np.abs(update_alive) >= 1e-10
+        if not np.any(nonzero_mask):
+            return 0, 0
             
-            if step_to_neg1 < step_to_pos1:
-                neg_steps.append(step_to_neg1)
-                pos_steps.append(step_to_pos1)
-            else:
-                neg_steps.append(step_to_pos1)
-                pos_steps.append(step_to_neg1)
+        update_nz = update_alive[nonzero_mask]
+        coloring_nz = coloring_alive[nonzero_mask]
         
-        delta_plus = min(pos_steps) if pos_steps else 0
-        delta_minus = max(neg_steps) if neg_steps else 0
+        steps_to_neg1 = (-1 - coloring_nz) / update_nz
+        steps_to_pos1 = (1 - coloring_nz) / update_nz
+        
+        pos_steps = np.maximum(steps_to_neg1, steps_to_pos1)
+        neg_steps = np.minimum(steps_to_neg1, steps_to_pos1)
+        
+        delta_plus = np.min(pos_steps) if len(pos_steps) > 0 else 0
+        delta_minus = np.max(neg_steps) if len(neg_steps) > 0 else 0
         
         return delta_minus, delta_plus
     
