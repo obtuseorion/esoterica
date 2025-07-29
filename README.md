@@ -248,25 +248,6 @@ For production use cases with large datasets, consider:
 - Distributed computing approaches  
 - Alternative balancing methods for specific domains
 
-## Research Applications
-
-This implementation is particularly useful for:
-
-- **Algorithmic Research**: Testing theoretical bounds and analyzing subgaussianity
-- **Balanced Sampling**: Creating representative dataset splits
-- **Discrepancy Theory**: Exploring vector balancing problems
-- **Educational Use**: Understanding the Gram-Schmidt Walk algorithm
-
-## Contributing
-
-Contributions are welcome! Areas for improvement:
-
-- [ ] Approximate algorithms for large-scale data
-- [ ] Sparse matrix support for high-dimensional data
-- [ ] Integration with popular ML frameworks
-- [ ] Additional balancing criteria and metrics
-- [ ] Performance optimizations and parallelization
-
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
